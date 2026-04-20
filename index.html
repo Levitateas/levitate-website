@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Levitate AS</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --dark:   #3a3a3a;
+      --red:    #b83232;
+      --light:  #f5f4f2;
+      --white:  #ffffff;
+      --mid:    #6b6b6b;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      color: var(--dark);
+      background: var(--white);
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--white);
+      border-bottom: 2px solid var(--light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2.5rem;
+    }
+
+    nav .logo img {
+      height: 64px;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+
+    nav ul a {
+      text-decoration: none;
+      color: var(--dark);
+      font-size: 0.95rem;
+      letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+
+    nav ul a:hover { color: var(--red); }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh;
+      background: var(--dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+    }
+
+    #hero .accent-bar {
+      width: 60px;
+      height: 5px;
+      background: var(--red);
+      margin: 0 auto 2rem;
+    }
+
+    #hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 300;
+      color: var(--white);
+      letter-spacing: 0.04em;
+      line-height: 1.2;
+    }
+
+    #hero h1 span { color: var(--red); font-weight: 600; }
+
+    #hero p {
+      margin-top: 1.5rem;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: #aaa;
+      max-width: 560px;
+      line-height: 1.7;
+    }
+
+    #hero a.cta {
+      display: inline-block;
+      margin-top: 2.5rem;
+      padding: 0.85rem 2.2rem;
+      background: var(--red);
+      color: var(--white);
+      text-decoration: none;
+      font-size: 0.95rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: opacity 0.2s;
+    }
+
+    #hero a.cta:hover { opacity: 0.85; }
+
+    /* SECTIONS */
+    section {
+      padding: 5rem 2rem;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--red);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 400;
+      color: var(--dark);
+      margin-bottom: 1.5rem;
+    }
+
+    .divider {
+      width: 40px;
+      height: 3px;
+      background: var(--red);
+      margin-bottom: 2rem;
+    }
+
+    /* OM OSS */
+    #om-oss { background: var(--light); }
+
+    #om-oss p {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--mid);
+      max-width: 720px;
+    }
+
+    .stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .stat .number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--dark);
+      line-height: 1;
+    }
+
+    .stat .number span { color: var(--red); }
+
+    .stat .label {
+      font-size: 0.9rem;
+      color: var(--mid);
+      margin-top: 0.4rem;
+    }
+
+    /* TJENESTER */
+    #tjenester { background: var(--white); }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .card {
+      border: 1px solid #e0e0e0;
+      padding: 2rem;
+      position: relative;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--red);
+    }
+
+    .card:hover {
+      border-color: var(--red);
+      transform: translateY(-3px);
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      color: var(--dark);
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: var(--mid);
+    }
+
+    /* KONTAKT */
+    #kontakt { background: var(--dark); }
+
+    #kontakt .section-title { color: var(--white); }
+    #kontakt .section-label { color: var(--red); }
+
+    #kontakt p {
+      color: #aaa;
+      font-size: 1rem;
+      line-height: 1.7;
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .contact-info a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: color 0.2s;
+    }
+
+    .contact-info a:hover { color: var(--red); }
+
+    .contact-info .icon {
+      display: inline-block;
+      width: 20px;
+      height: 2px;
+      background: var(--red);
+      flex-shrink: 0;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #2a2a2a;
+      color: #666;
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.85rem;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 600px) {
+      nav ul { gap: 1rem; }
+      nav { padding: 1rem 1.2rem; }
+      .stats { gap: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="logo" href="#hero">
+      <img src="images/logo.png" alt="Levitate AS" />
+    </a>
+    <ul>
+      <li><a href="#om-oss">Om oss</a></li>
+      <li><a href="#tjenester">Tjenester</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="accent-bar"></div>
+    <h1>Fullstack IT-konsulenter<br><span>for din bransje</span></h1>
+    <p>Vi leverer bred IT-kompetanse på tvers av teknologi og domener, med særlig sterk erfaring innen strøm og telekom.</p>
+    <a href="#kontakt" class="cta">Ta kontakt</a>
+  </section>
+
+  <!-- OM OSS -->
+  <section id="om-oss">
+    <div class="container">
+      <div class="section-label">Om oss</div>
+      <h2 class="section-title">Erfaring som teller</h2>
+      <div class="divider"></div>
+      <p>
+        Levitate AS er et norsk IT-konsulentselskap med tre dedikerte fullstack-konsulenter.
+        Vi jobber på tvers av teknologistack og bransjer, og har særlig dyp erfaring fra kraft- og
+        strømbransjen samt telekomsektoren. Vi kjenner domenene innenfra og leverer løsninger som fungerer i praksis.
+      </p>
+      <div class="stats">
+        <div class="stat">
+          <div class="number">20<span>+</span></div>
+          <div class="label">År i bransjen</div>
+        </div>
+        <div class="stat">
+          <div class="number">3</div>
+          <div class="label">Erfarne konsulenter</div>
+        </div>
+        <div class="stat">
+          <div class="number">2</div>
+          <div class="label">Sektorer</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TJENESTER -->
+  <section id="tjenester">
+    <div class="container">
+      <div class="section-label">Tjenester</div>
+      <h2 class="section-title">Hva vi tilbyr</h2>
+      <div class="divider"></div>
+      <div class="cards">
+        <div class="card">
+          <h3>Fullstack-utvikling</h3>
+          <p>Vi dekker hele stacken, fra frontend og API til databaser og infrastruktur, og leverer helhetlige løsninger.</p>
+        </div>
+        <div class="card">
+          <h3>Strøm og energi</h3>
+          <p>Dyptgående fagkunnskap om kraftmarkedet, systemer og prosesser i energibransjen. Vi forstår kompleksiteten.</p>
+        </div>
+        <div class="card">
+          <h3>Telekommunikasjon</h3>
+          <p>Solid erfaring fra telekomsektoren, fra systemintegrasjon til faglig rådgivning på tekniske løsninger.</p>
+        </div>
+        <div class="card">
+          <h3>Prosjektledelse</h3>
+          <p>Vi leder og støtter IT-prosjekter fra analyse og kravspesifikasjon til implementering og leveranse.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KONTAKT -->
+  <section id="kontakt">
+    <div class="container">
+      <div class="section-label">Kontakt</div>
+      <h2 class="section-title">La oss ta en prat</h2>
+      <div class="divider"></div>
+      <p>Har du et prosjekt du trenger hjelp med, eller ønsker du å vite mer om hva vi kan bidra med? Ta gjerne kontakt.</p>
+      <div class="contact-info">
+        <a href="mailto:post@levitate.no"><span class="icon"></span> post@levitate.no</a>
+        <a href="tel:+4700000000"><span class="icon"></span> +47 000 00 000</a>
+        <a href="#"><span class="icon"></span> Oslo, Norge</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2026 Levitate AS &mdash; Org.nr. 915 511 783
+  </footer>
+
+</body>
+</html>
